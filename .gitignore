@@ -1,0 +1,6 @@
+.envrc
+**/result
+**/dist-newstyle
+*.qcow2
+*.raw
+*.raw.bmap
