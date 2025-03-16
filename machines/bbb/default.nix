@@ -16,18 +16,17 @@
   boot = {
     loader = {
       grub.enable = false;
-      generic-extlinux-compatible.enable = true;
+      generic-extlinux-compatible = {
+        enable = true;
+        # save space
+        configurationLimit = 3;
+      };
     };
 
     consoleLogLevel = lib.mkDefault 7;
 
-    kernelPackages =
-      let
-        customKernel = pkgs.linuxKernel.kernels.linux_6_13.override {
-          defconfig = "omap2plus_defconfig";
-        };
-      in
-      pkgs.linuxPackagesFor customKernel;
+    # See /pkgs
+    kernelPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor pkgs.linux_bbb);
 
     kernelParams = [
       "earlycon"

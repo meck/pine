@@ -1,5 +1,4 @@
 { pkgs }:
-# Place for custom packages
 {
-  #foo = pkgs.callPackage ./foo { };
+  linux_bbb = pkgs.callPackage ./bbb-kernel.nix { };
 }
