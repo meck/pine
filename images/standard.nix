@@ -43,8 +43,11 @@
 
   environment.systemPackages = with pkgs; [
     file
-    git
-    htop
+    gitMinimal
+    (htop.override {
+      # pulls in lots of stuff
+      sensorsSupport = false;
+    })
     iperf3
     lsof
     nano

@@ -16,7 +16,15 @@ in
     self.inputs.disko.nixosModules.disko
   ];
 
-  options.pine.enable = mkEnableOption "Enable pine base config";
+  options.pine = {
+    enable = mkEnableOption "Enable pine base config";
+
+    disableRegistry = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Clear /etc/nix/registry.json to save some space (removes nixpkgs from the store)";
+    };
+  };
 
   config = mkIf cfg.enable {
 
@@ -28,12 +36,16 @@ in
       config.allowUnfree = true;
     };
 
-    nix.settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
+    nix = {
 
-      # Add wheel group for remote nixos-rebuild
-      trusted-users = [ "@wheel" ];
+      settings = {
+        # Enable flakes and new 'nix' command
+        experimental-features = "nix-command flakes";
+
+        # Add wheel group for remote nixos-rebuild
+        trusted-users = [ "@wheel" ];
+      };
+      registry = mkIf cfg.disableRegistry (mkForce { });
     };
 
     # Generate .bmap files
