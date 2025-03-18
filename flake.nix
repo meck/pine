@@ -32,13 +32,27 @@
     }@inputs:
     let
       inherit (self) outputs;
-      forAllSystems = nixpkgs.lib.genAttrs [
+
+      lib = nixpkgs.lib;
+
+      forHostSystems = lib.genAttrs [
         "x86_64-linux"
-        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
       ];
+
+      # nixos-anywhere binary reexport
+      nixos-anywherePackges = forHostSystems (system: {
+        nixos-anywhere = inputs.nixos-anywhere.packages."${system}".nixos-anywhere;
+      });
+
+
+      mkDiskoImage = nixosConfig: nixosConfig.config.system.build.diskoImagesScript;
+
       mkBBBsystem =
         sysConfig:
-        nixpkgs.lib.nixosSystem {
+        lib.nixosSystem {
           specialArgs = { inherit self; };
           modules = [
             outputs.nixosModules.cross
@@ -58,10 +72,7 @@
 
     in
     {
-      # nixos-anywhere binary reexport
-      packages = forAllSystems (system: {
-        nixos-anywhere = inputs.nixos-anywhere.packages."${system}".nixos-anywhere;
-      });
+      packages = nixos-anywherePackges;
 
       # Custom packages and modifications, exported as overlays
       overlays = import ./overlays { };
@@ -94,10 +105,8 @@
 
       # https://github.com/nix-community/disko/blob/master/docs/disko-images.md
       images = {
-        bbb-standard =
-          outputs.nixosConfigurations.pine-bbb-standard-sd.config.system.build.diskoImagesScript;
-        bbb-installer =
-          outputs.nixosConfigurations.pine-bbb-installer.config.system.build.diskoImagesScript;
+        bbb-standard = mkDiskoImage  outputs.nixosConfigurations.pine-bbb-standard-sd;
+        bbb-installer = mkDiskoImage outputs.nixosConfigurations.pine-bbb-installer;
       };
     };
 }
