@@ -6,11 +6,12 @@
 }:
 with lib;
 let
-  cfg = config.pine.bbb;
+  cfg = config.pine.machine;
+  imageTarget = cfg.bbb.imageTarget;
 in
 {
 
-  options.pine.bbb.imageTarget = mkOption {
+  options.pine.machine.bbb.imageTarget = mkOption {
     type = lib.types.enum [
       "emmc"
       "sdcard"
@@ -20,7 +21,7 @@ in
 
   config =
     let
-      targetDevNr = if cfg.imageTarget == "emmc" then "1" else "0";
+      targetDevNr = if imageTarget == "emmc" then "1" else "0";
       targetDevice = "/dev/mmcblk${targetDevNr}";
 
       bootloader = pkgs.buildUBoot {
@@ -45,15 +46,15 @@ in
         echo "Installing MLO to ${targetDevice}"
         dd conv=notrunc if=${bootloader}/MLO \
             of=${targetDevice} bs=512 \
-            seek=${config.disko.devices.disk."${cfg.imageTarget}".content.partitions.mlo.start}
+            seek=${config.disko.devices.disk."${imageTarget}".content.partitions.mlo.start}
 
         echo "Installing U-boot to ${targetDevice}"
         dd conv=notrunc if=${bootloader}/u-boot.img \
             of=${targetDevice} bs=512 \
-            seek=${config.disko.devices.disk."${cfg.imageTarget}".content.partitions.u-boot.start}
+            seek=${config.disko.devices.disk."${imageTarget}".content.partitions.u-boot.start}
       '';
     in
-    {
+    mkIf cfg.bbb.enable {
 
       # https://github.com/nix-community/disko/issues/988
       environment.systemPackages = lib.mkIf (pkgs.stdenv.hostPlatform.system == "armv7l-linux") [
@@ -62,8 +63,8 @@ in
 
       disko.devices = {
         disk = {
-          "${cfg.imageTarget}" = {
-            imageName = "${config.networking.hostName}-${cfg.imageTarget}";
+          "${imageTarget}" = {
+            imageName = "${config.networking.hostName}-${imageTarget}";
             imageSize = "4G";
             device = targetDevice;
             type = "disk";
@@ -115,7 +116,7 @@ in
 
             # FIXME: nixos-anywhere fails sometimes on target because
             # partition-by-label isent populated
-            preMountHook = lib.mkIf (cfg.imageTarget == "emmc") ''
+            preMountHook = lib.mkIf (imageTarget == "emmc") ''
               sleep 2
             '';
 

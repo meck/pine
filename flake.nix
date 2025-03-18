@@ -41,12 +41,14 @@
         nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            outputs.nixosModules.bbb-machine
             outputs.nixosModules.cross
             {
               pine = {
                 crossBuildSystem = "x86_64-linux";
-                bbb.imageTarget = sysConfig.imageTarget;
+                machine.bbb = {
+                  enable = true;
+                  imageTarget = sysConfig.imageTarget;
+                };
               };
             }
           ] ++ sysConfig.modules;
@@ -63,7 +65,7 @@
       overlays = import ./overlays { };
 
       #Nixos modules
-      nixosModules = (import ./modules) // (import ./images) // (import ./machines);
+      nixosModules = (import ./modules) // (import ./images);
 
       # NixOS configuration
       nixosConfigurations = {

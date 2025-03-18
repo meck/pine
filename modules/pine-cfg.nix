@@ -3,6 +3,7 @@
   pkgs,
   lib,
   outputs,
+  inputs,
   ...
 }:
 with lib;
@@ -10,6 +11,10 @@ let
   cfg = config.pine;
 in
 {
+  imports = [
+    ./machines/bbb
+    inputs.disko.nixosModules.disko
+  ];
 
   options.pine.enable = mkEnableOption "Enable pine base config";
 
