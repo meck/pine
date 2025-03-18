@@ -14,12 +14,17 @@ in
 
   options.pine = {
     crossHostSystem = mkOption {
-      type = types.str;
-      description = "The target architecture";
+      type = types.either types.str types.attrs;
+      example = {
+        system = "armv7l-linux";
+      };
     };
 
     crossBuildSystem = mkOption {
-      type = types.str;
+      type = types.either types.str types.attrs;
+      example = {
+        system = "aarch64-linux";
+      };
       description = "The build architecture";
     };
   };
@@ -33,7 +38,7 @@ in
 
     disko.imageBuilder =
       let
-        diskoPkgs = self.inputs.nixpkgs.legacyPackages."${cfg.crossBuildSystem}";
+        diskoPkgs = self.inputs.nixpkgs.legacyPackages."${config.nixpkgs.buildPlatform.system}";
       in
       {
         enableBinfmt = true;

@@ -14,7 +14,7 @@ in
   options.pine.machine.bbb.enable = mkEnableOption "Enable pine beaglebone black";
 
   config = mkIf cfg.bbb.enable {
-    pine.crossHostSystem = "armv7l-linux";
+    pine.crossHostSystem = import ./platform.nix;
 
     # Uses U-Boot
     boot = {

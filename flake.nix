@@ -47,7 +47,6 @@
         nixos-anywhere = inputs.nixos-anywhere.packages."${system}".nixos-anywhere;
       });
 
-
       mkDiskoImage = nixosConfig: nixosConfig.config.system.build.diskoImagesScript;
 
       mkBBBsystem =
@@ -105,7 +104,7 @@
 
       # https://github.com/nix-community/disko/blob/master/docs/disko-images.md
       images = {
-        bbb-standard = mkDiskoImage  outputs.nixosConfigurations.pine-bbb-standard-sd;
+        bbb-standard = mkDiskoImage outputs.nixosConfigurations.pine-bbb-standard-sd;
         bbb-installer = mkDiskoImage outputs.nixosConfigurations.pine-bbb-installer;
       };
     };
