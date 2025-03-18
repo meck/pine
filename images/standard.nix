@@ -24,7 +24,6 @@
   # Cleanup
   systemd = {
     package = pkgs.systemd.override {
-      withEfi = false;
       withTpm2Tss = false;
     };
     suppressedSystemUnits = [
