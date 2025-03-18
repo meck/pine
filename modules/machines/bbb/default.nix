@@ -29,8 +29,37 @@ in
 
       consoleLogLevel = lib.mkDefault 7;
 
-      # See /pkgs
+      # See /pkgs for complete kernel definition
       kernelPackages = pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor pkgs.linux_bbb);
+
+      # Manually define availableKernelModules to avoid:
+      # https://github.com/NixOS/nixpkgs/issues/154163
+      # alternative is an overlay:
+      # makeModulesClosure = x: prev.makeModulesClosure (x // { allowMissing = true; });
+      initrd = {
+        includeDefaultModules = false;
+        availableKernelModules = [
+          "ext2"
+          "ext4"
+          "autofs"
+          "sd_mod"
+          "sr_mod"
+          "mmc_block"
+          "ehci_hcd"
+          "xhci_hcd"
+          "usbhid"
+          "hid_generic"
+          "hid_lenovo"
+          "hid_apple"
+          "hid_roccat"
+          "hid_logitech_hidpp"
+          "hid_logitech_dj"
+          "hid_microsoft"
+          "hid_cherry"
+          "hid_corsair"
+        ];
+        kernelModules = [ ];
+      };
 
       kernelParams = [
         "earlycon"
