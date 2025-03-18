@@ -21,6 +21,7 @@
     tmp.cleanOnBoot = true;
   };
 
+  # Cleanup
   systemd = {
     package = pkgs.systemd.override {
       withEfi = false;
@@ -43,14 +44,17 @@
 
   environment.systemPackages = with pkgs; [
     file
+    git
     htop
     iperf3
     lsof
     nano
     nmap
     p7zip
+    picocom
     psmisc
     rsync
+    tio
     tree
     unrar
     unzip
@@ -59,15 +63,12 @@
     which
     whois
     zip
-    git
-    picocom
   ];
 
   # Time zone.
-  time.timeZone = "Europe/Stockholm";
+  time.timeZone = lib.mkDefault "Europe/Stockholm";
 
   programs = {
-
     # Quality of life
     starship.enable = true;
     tmux.enable = true;

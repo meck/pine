@@ -2,8 +2,7 @@
   config,
   pkgs,
   lib,
-  outputs,
-  inputs,
+  self,
   ...
 }:
 with lib;
@@ -14,7 +13,7 @@ in
   imports = [
     ./pine-user.nix
     ./machines/bbb
-    inputs.disko.nixosModules.disko
+    self.inputs.disko.nixosModules.disko
   ];
 
   options.pine.enable = mkEnableOption "Enable pine base config";
@@ -23,8 +22,8 @@ in
 
     nixpkgs = {
       overlays = [
-        outputs.overlays.additions
-        outputs.overlays.modifications
+        self.outputs.overlays.additions
+        self.outputs.overlays.modifications
       ];
       config.allowUnfree = true;
     };

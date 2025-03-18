@@ -39,11 +39,12 @@
       mkBBBsystem =
         sysConfig:
         nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
+          specialArgs = { inherit self; };
           modules = [
             outputs.nixosModules.cross
             {
               pine = {
+                enable = true;
                 crossBuildSystem = "x86_64-linux";
                 defaultUser = true;
                 machine.bbb = {

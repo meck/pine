@@ -1,16 +1,12 @@
 {
-  inputs,
-  outputs,
+  self,
   ...
 }:
 {
   imports = [
-    outputs.nixosModules.pine
-    "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
+    self.outputs.nixosModules.pine
+    "${self.inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
   ];
-
-  # Main cfg options
-  pine.enable = true;
 
   system.stateVersion = "24.11";
 }

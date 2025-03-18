@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  inputs,
+  self,
   ...
 }:
 
@@ -33,7 +33,7 @@ in
 
     disko.imageBuilder =
       let
-        diskoPkgs = inputs.nixpkgs.legacyPackages."${cfg.crossBuildSystem}";
+        diskoPkgs = self.inputs.nixpkgs.legacyPackages."${cfg.crossBuildSystem}";
       in
       {
         enableBinfmt = true;
