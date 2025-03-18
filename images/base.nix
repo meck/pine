@@ -6,7 +6,6 @@
 {
   imports = [
     outputs.nixosModules.pine
-    ./pine-user.nix
     "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
   ];
 

@@ -12,6 +12,7 @@ let
 in
 {
   imports = [
+    ./pine-user.nix
     ./machines/bbb
     inputs.disko.nixosModules.disko
   ];

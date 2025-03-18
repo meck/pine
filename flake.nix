@@ -45,6 +45,7 @@
             {
               pine = {
                 crossBuildSystem = "x86_64-linux";
+                defaultUser = true;
                 machine.bbb = {
                   enable = true;
                   imageTarget = sysConfig.imageTarget;
