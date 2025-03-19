@@ -66,5 +66,18 @@ in
         "console=ttyS0,115200n8"
       ];
     };
+
+    # Cleanup
+    systemd = {
+      package = pkgs.systemd.override {
+        withTpm2Tss = false;
+      };
+      suppressedSystemUnits = [
+        "systemd-bootctl@.service"
+        "systemd-bootctl.socket"
+        "systemd-hibernate-clear.service"
+      ];
+    };
+
   };
 }

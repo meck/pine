@@ -21,18 +21,6 @@
     tmp.cleanOnBoot = true;
   };
 
-  # Cleanup
-  systemd = {
-    package = pkgs.systemd.override {
-      withTpm2Tss = false;
-    };
-    suppressedSystemUnits = [
-      "systemd-bootctl@.service"
-      "systemd-bootctl.socket"
-      "systemd-hibernate-clear.service"
-    ];
-  };
-
   # Use systemd networking
   systemd.network.enable = true;
   networking.useNetworkd = true;
