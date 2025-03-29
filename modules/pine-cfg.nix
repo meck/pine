@@ -12,6 +12,8 @@ in
 {
   imports = [
     ./pine-user.nix
+    ./usbip.nix
+    ./gpiod.nix
     ./machines/bbb
     self.inputs.disko.nixosModules.disko
   ];
