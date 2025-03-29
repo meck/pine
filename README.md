@@ -85,6 +85,5 @@ nixos-rebuild <switch or boot> --flake .#<nixosConfiguration> --target-host pine
 
 ## TODO
 
-- [ ] Enable mDNS (installer and standard image)
 - [ ] Expand partition on first boot when built for SD card
 - [ ] Look into `disk-by/partition-label` issue
