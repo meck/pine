@@ -9,7 +9,10 @@ let
   cfg = config.pine.machine;
 in
 {
-  imports = [ ./disk-layout.nix ];
+  imports = [
+    ./disk-layout.nix
+    ./gpio.nix
+  ];
 
   options.pine.machine.bbb.enable = mkEnableOption "Enable pine beaglebone black";
 
