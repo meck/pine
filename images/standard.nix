@@ -22,8 +22,9 @@
   };
 
   # Use systemd networking
-  systemd.network.enable = true;
   networking.useNetworkd = true;
+  systemd.network.enable = true;
+  services.resolved.enable = true;
 
   services.openssh.enable = true;
 
@@ -44,7 +45,6 @@
     picocom
     psmisc
     rsync
-    tio
     tree
     unrar
     unzip
@@ -59,42 +59,10 @@
   time.timeZone = lib.mkDefault "Europe/Stockholm";
 
   programs = {
-    # Quality of life
-    starship.enable = true;
-    tmux.enable = true;
-
-    # Editors
+    # Editor
     vim = {
       enable = true;
       defaultEditor = true;
-    };
-  };
-
-  # Specific settings for nixos-rebuild
-  # nixos-rebuild build-vm --flake .#<config>
-  # result/bin/run-<config>-vm
-  # ssh -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no root@localhost -p 2221
-  virtualisation.vmVariant = {
-    virtualisation = {
-      graphics = false;
-
-      # use native qemu
-      host.pkgs = pkgs.buildPackages;
-      qemu.package = pkgs.buildPackages.qemu;
-
-      # Map ssh port
-      forwardPorts = [
-        {
-          host.port = 2221;
-          guest.port = 22;
-        }
-      ];
-    };
-    users.users.root.password = "pass";
-    services.openssh.settings = {
-      PasswordAuthentication = lib.mkForce true;
-      KbdInteractiveAuthentication = lib.mkForce true;
-      PermitRootLogin = "yes";
     };
   };
 

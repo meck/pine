@@ -59,7 +59,7 @@
               pine = {
                 enable = true;
                 crossBuildSystem = "x86_64-linux";
-                defaultUser = true;
+                defaultUser = lib.mkDefault true;
                 machine.bbb = {
                   enable = true;
                   imageTarget = sysConfig.imageTarget;
@@ -98,6 +98,12 @@
         # For install on internal emmc (using pine-bbb-installer and nixos-anywhere)
         pine-bbb-standard-emmc = mkBBBsystem {
           modules = [ outputs.nixosModules.image-standard ];
+          imageTarget = "emmc";
+        };
+
+        # Tate system
+        tate-emmc = mkBBBsystem {
+          modules = [ outputs.nixosModules.image-tate ];
           imageTarget = "emmc";
         };
       };
