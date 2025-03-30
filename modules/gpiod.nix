@@ -12,15 +12,12 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.libgpiod ];
-
+    systemd.packages = [ pkgs.libgpiod ];
     services.dbus.packages = [ pkgs.libgpiod ];
     services.udev.packages = [ pkgs.libgpiod ];
-
-    systemd.packages = [ pkgs.libgpiod ];
-    systemd.services.gpio-manager = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.ReadOnlyDirectories = "";
-    };
+    services.udev.extraRules = ''
+      SUBSYSTEM=="gpio", KERNEL=="gpiochip[0-9]*", TAG+="systemd", ENV{SYSTEMD_WANTS}="gpio-manager.service"
+    '';
 
     users.groups.gpio = { };
     users.users.gpio-manager = {

@@ -55,5 +55,22 @@ in
         filter = "am335x-boneblack.dtb";
       }
     ];
+
+    systemd.services = lib.mkIf config.pine.gpiod.enable {
+      gpio-manager = {
+        requires = [
+          "dev-gpiochip0.device"
+          "dev-gpiochip1.device"
+          "dev-gpiochip2.device"
+          "dev-gpiochip3.device"
+        ];
+        after = [
+          "dev-gpiochip0.device"
+          "dev-gpiochip1.device"
+          "dev-gpiochip2.device"
+          "dev-gpiochip3.device"
+        ];
+      };
+    };
   };
 }
